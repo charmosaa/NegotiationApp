@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NegotiationApp.Api\NegotiationApp.Api.csproj" />
+    <ProjectReference Include="..\NegotiationApp.Application\NegotiationApp.Application.csproj" />
+    <ProjectReference Include="..\NegotiationApp.Domain\NegotiationApp.Domain.csproj" />
+    <ProjectReference Include="..\NegotiationApp.Infrastructure\NegotiationApp.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
