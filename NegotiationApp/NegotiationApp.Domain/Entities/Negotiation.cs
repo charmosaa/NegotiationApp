@@ -35,7 +35,7 @@ namespace NegotiationApp.Domain.Entities
         {
             if (Status != NegotiationStatus.PendingClientOffer && Status != NegotiationStatus.RejectedByEmployee)
             {
-                throw new InvalidNegotiationStateException("Previous negotiation still pending, you can not propose a price now");
+                throw new InvalidNegotiationStateException($"Offer status is {Status}, you can not negotiate now");
             }
 
             if (newPrice <= 0)
@@ -52,7 +52,7 @@ namespace NegotiationApp.Domain.Entities
                 (DateTime.UtcNow - EmployeeResponseDate.Value).TotalDays > ClientResponseDays)
             {
                 CancelNegotiation("Client has exceeded response time");
-                throw new ClientResponseTimeExceededException("Client has exceeded response time, so the negotiation has been canceled");
+                throw new ClientResponseTimeExceededException("Client has exceeded response time, negotiation has been canceled");
             }
 
             CurrentProposedPrice = newPrice;
@@ -64,7 +64,7 @@ namespace NegotiationApp.Domain.Entities
         {
             if (Status != NegotiationStatus.ClientOffered)
             {
-                throw new InvalidNegotiationStateException("Can not accept in this negotiation state");
+                throw new InvalidNegotiationStateException($"Can not accept, negotiation state is {Status}");
             }
             Status = NegotiationStatus.AcceptedByEmployee;
             EmployeeResponseDate = DateTime.UtcNow;
@@ -74,7 +74,7 @@ namespace NegotiationApp.Domain.Entities
         {
             if (Status != NegotiationStatus.ClientOffered)
             {
-                throw new InvalidNegotiationStateException("Can not reject in this negotiation state");
+                throw new InvalidNegotiationStateException($"Can not reject, negotiation state is {Status}");
             }
             AttemptsLeft--;
             Status = NegotiationStatus.RejectedByEmployee;
@@ -90,7 +90,7 @@ namespace NegotiationApp.Domain.Entities
         {
             if (Status == NegotiationStatus.AcceptedByEmployee || Status == NegotiationStatus.Cancelled)
             {
-                throw new InvalidNegotiationStateException("Negotiation has already been rejected or canceled");
+                throw new InvalidNegotiationStateException("Negotiation has already been accepted or canceled");
             }
             Status = NegotiationStatus.Cancelled;
             // TODO event: NegotiationCancelledEvent
