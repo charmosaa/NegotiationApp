@@ -33,6 +33,11 @@ namespace NegotiationApp.Domain.Entities
 
         public void ProposePrice(decimal newPrice)
         {
+            if (AttemptsLeft <= 0)
+            {
+                throw new NegotiationAttemptsExceededException("You cannot negotiate more");
+            }
+
             if (Status != NegotiationStatus.PendingClientOffer && Status != NegotiationStatus.RejectedByEmployee)
             {
                 throw new InvalidNegotiationStateException($"Offer status is {Status}, you can not negotiate now");
@@ -41,11 +46,6 @@ namespace NegotiationApp.Domain.Entities
             if (newPrice <= 0)
             {
                 throw new InvalidProposedPriceException("Proposed price has to be more than 0");
-            }
-
-            if (AttemptsLeft <= 0)
-            {
-                throw new NegotiationAttemptsExceededException("You cannot negotiate more");
             }
 
             if (Status == NegotiationStatus.RejectedByEmployee && LastOfferDate.HasValue &&
